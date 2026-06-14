@@ -14,7 +14,7 @@
 
 // ---- CONFIG ---------------------------------------------------------------
 const MODEL = "gemini-2.5-flash-image";       // swap to a newer image model here if desired
-const DAILY_LIMIT = 2;                          // free generations per device per day
+const DAILY_LIMIT = 100;                          // free generations per device per day
 const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;      // 10 MB
 
 // ---- PROMPTS --------------------------------------------------------------
