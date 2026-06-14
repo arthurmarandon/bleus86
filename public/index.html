@@ -398,6 +398,8 @@ document.getElementById('again').addEventListener('click', ()=>{
 async function generateLook(){
   form.style.display='none';
   loading.classList.add('show');
+  // Keep the user's view on the spinner (mobile otherwise drifts to the page bottom).
+  loading.scrollIntoView({behavior:'smooth', block:'center'});
 
   try {
     const fd = new FormData();
@@ -432,7 +434,7 @@ function showResult(url){
   document.getElementById('dlBtn').href = url;
   document.getElementById('igBtn').onclick = shareNative;
 
-  result.scrollIntoView({behavior:'smooth', block:'center'});
+  result.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 // Native share sheet — on phones this can share the actual IMAGE (with the
