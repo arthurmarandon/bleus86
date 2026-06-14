@@ -75,13 +75,14 @@
   .step-label{font-family:'Anton';text-transform:uppercase;font-size:18px;margin:6px 0 14px;color:var(--bleu)}
   .step-label small{display:block;font-family:'Archivo';font-weight:400;font-size:13px;color:#555;text-transform:none;margin-top:3px}
 
-  .drop{border:3px dashed var(--bleu-vif);border-radius:6px;padding:38px 20px;text-align:center;cursor:pointer;
+  .drop{display:block;width:100%;border:3px dashed var(--bleu-vif);border-radius:6px;padding:38px 20px;text-align:center;cursor:pointer;
     background:#fff;transition:background .15s,border-color .15s}
   .drop:hover{background:#eef2ff}
   .drop.has{border-style:solid;border-color:var(--rouge);padding:14px}
   .drop p{font-weight:600;color:#444}
   .drop .hint{font-size:12px;color:#888;margin-top:6px}
   .drop img{max-width:200px;max-height:200px;border-radius:6px;border:3px solid var(--noir)}
+  .drop input[type=file]{display:none}
 
   /* camera */
   .or-sep{display:flex;align-items:center;text-align:center;margin:16px 0;color:#999;font-weight:600;font-size:13px}
