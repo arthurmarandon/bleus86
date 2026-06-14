@@ -249,7 +249,7 @@
           <a class="dl" id="dlBtn" download="mon-look-bleus86.png">⬇️ Télécharger</a>
           <a class="wa" id="waBtn" target="_blank">WhatsApp</a>
           <a class="x" id="xBtn" target="_blank">X / Twitter</a>
-          <button class="ig" id="igBtn">Instagram</button>
+          <button class="ig" id="igBtn">📲 Partager l'image</button>
         </div>
         <button class="go" id="again" style="margin-top:18px;background:var(--rouge)">🔄 Recommencer</button>
       </div>
@@ -429,16 +429,38 @@ function showResult(url){
   loading.classList.remove('show');
   resultImg.src = url;
   result.classList.add('show');
+  window._lastImageUrl = url; // remember for native share
 
-  const shareUrl = encodeURIComponent(location.href);
-  const text = encodeURIComponent("Regarde mon look des Bleus de 86 ! 🥸⚽ Génère le tien :");
+  // \uD83E\uDD78 = disguised-face emoji, \u26BD = soccer ball (Unicode escapes
+  // survive any file encoding, unlike pasting the raw emoji).
+  const msg = "Regarde mon look des Bleus de 86 ! \uD83E\uDD78\u26BD G\u00E9n\u00E8re le tien :";
+  const pageUrl = "https://bleus86.fr";
+  const text = encodeURIComponent(msg);
+  const shareUrl = encodeURIComponent(pageUrl);
+
   document.getElementById('dlBtn').href = url;
   document.getElementById('waBtn').href = 'https://wa.me/?text='+text+'%20'+shareUrl;
   document.getElementById('xBtn').href  = 'https://twitter.com/intent/tweet?text='+text+'&url='+shareUrl;
-  document.getElementById('igBtn').onclick = ()=>{
-    alert("Télécharge ton image puis poste-la en story Instagram avec #Bleus86 ! 📲");
-  };
+  document.getElementById('igBtn').onclick = shareNative;
+
   result.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+// Native share sheet — on phones this can share the actual IMAGE (with the
+// site URL baked in), which is far more viral than a text-only link.
+async function shareNative(){
+  const msg = "Mon look des Bleus de 86 ! \uD83E\uDD78\u26BD Cr\u00E9e le tien sur bleus86.fr";
+  try {
+    const res = await fetch(window._lastImageUrl);
+    const blob = await res.blob();
+    const file = new File([blob], 'mon-look-bleus86.png', { type: blob.type || 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], text: msg });
+      return;
+    }
+    if (navigator.share) { await navigator.share({ text: msg, url: 'https://bleus86.fr' }); return; }
+  } catch (e) { /* fall through to hint */ }
+  alert("T\u00E9l\u00E9charge ton image puis poste-la en story avec #Bleus86 ! \uD83D\uDCF2");
 }
 
 // --- trivia carousel ---
