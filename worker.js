@@ -105,7 +105,7 @@ ${pick(MALE_STYLES)}${SCENE}${captionRule(epithet)}`;
 
 // ---- HELPERS --------------------------------------------------------------
 const cors = {
-  "Access-Control-Allow-Origin": "*",                  // tighten to https://bleus86.fr in prod
+  "Access-Control-Allow-Origin": "https://bleus86.fr",                  // tighten to https://bleus86.fr in prod
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };
