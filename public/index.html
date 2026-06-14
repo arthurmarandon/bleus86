@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BLEUS 86 ⚽ — Génère ton look de légende des années 80</title>
+<meta name="description" content="Upload ta photo et découvre à quoi tu ressemblerais avec la moustache et le mulet des Bleus de 1986. Gratuit, fun, et 100% années 80.">
+<meta property="og:title" content="BLEUS 86 ⚽ — Génère ton look de 1986">
+<meta property="og:description" content="Moustache, mulet, maillot bleu : deviens un héros des Bleus de la Coupe du Monde 86 !">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0a2472">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bleu:#0a2472;        /* deep France blue */
+    --bleu-vif:#1b4dd8;    /* vivid blue */
+    --blanc:#f7f4ec;       /* warm vintage white */
+    --rouge:#e63027;       /* France red */
+    --or:#f2c14e;          /* warm 80s gold */
+    --noir:#13131a;
+    --grain:rgba(0,0,0,.04);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Archivo',sans-serif;
+    background:var(--bleu);
+    color:var(--blanc);
+    overflow-x:hidden;
+    line-height:1.5;
+  }
+  /* vintage grain overlay */
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.5;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    mix-blend-mode:overlay;
+  }
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+
+  /* ===== marquee ===== */
+  .marquee{background:var(--rouge);color:var(--blanc);font-family:'Anton';letter-spacing:.05em;
+    text-transform:uppercase;white-space:nowrap;overflow:hidden;padding:8px 0;font-size:14px;border-bottom:3px solid var(--noir)}
+  .marquee span{display:inline-block;animation:scroll 18s linear infinite;padding-left:100%}
+  @keyframes scroll{to{transform:translateX(-100%)}}
+
+  /* ===== hero ===== */
+  header{padding:34px 0 20px;text-align:center;position:relative}
+  .badge{display:inline-block;background:var(--or);color:var(--noir);font-family:'Archivo';font-weight:800;
+    text-transform:uppercase;font-size:12px;letter-spacing:.12em;padding:6px 14px;border-radius:30px;margin-bottom:18px;
+    border:2px solid var(--noir)}
+  h1{font-family:'Anton';font-size:clamp(52px,13vw,140px);line-height:.86;text-transform:uppercase;letter-spacing:-.01em;
+    color:var(--blanc);text-shadow:5px 5px 0 var(--rouge),10px 10px 0 var(--noir)}
+  h1 .yr{color:var(--or);display:block}
+  .tag{font-size:clamp(16px,2.4vw,22px);max-width:560px;margin:22px auto 0;font-weight:600;color:#cfd8ff}
+  .tricolor{height:8px;width:160px;margin:24px auto 0;background:linear-gradient(90deg,var(--bleu-vif) 0 33%,var(--blanc) 33% 66%,var(--rouge) 66% 100%);border:2px solid var(--noir)}
+
+  .cta-main{display:inline-block;margin-top:30px;background:var(--rouge);color:#fff;font-family:'Anton';font-size:24px;
+    text-transform:uppercase;letter-spacing:.03em;text-decoration:none;padding:16px 40px;border:3px solid var(--noir);
+    box-shadow:6px 6px 0 var(--noir);transition:transform .1s,box-shadow .1s;cursor:pointer}
+  .cta-main:active{transform:translate(6px,6px);box-shadow:0 0 0 var(--noir)}
+
+  .stats{display:flex;gap:30px;justify-content:center;flex-wrap:wrap;margin:40px 0 10px}
+  .stat{text-align:center}
+  .stat b{font-family:'Anton';font-size:40px;color:var(--or);display:block;line-height:1}
+  .stat span{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#aab6e8}
+
+  /* ===== generator ===== */
+  .gen{background:var(--blanc);color:var(--noir);border:4px solid var(--noir);border-radius:6px;margin:50px 0;
+    box-shadow:12px 12px 0 var(--rouge);overflow:hidden}
+  .gen-head{background:var(--bleu);color:#fff;padding:22px 26px;font-family:'Anton';font-size:26px;text-transform:uppercase;
+    border-bottom:4px solid var(--noir)}
+  .gen-body{padding:26px}
+  .step-label{font-family:'Anton';text-transform:uppercase;font-size:18px;margin:6px 0 14px;color:var(--bleu)}
+  .step-label small{display:block;font-family:'Archivo';font-weight:400;font-size:13px;color:#555;text-transform:none;margin-top:3px}
+
+  .drop{border:3px dashed var(--bleu-vif);border-radius:6px;padding:38px 20px;text-align:center;cursor:pointer;
+    background:#fff;transition:background .15s,border-color .15s}
+  .drop:hover{background:#eef2ff}
+  .drop.has{border-style:solid;border-color:var(--rouge);padding:14px}
+  .drop p{font-weight:600;color:#444}
+  .drop .hint{font-size:12px;color:#888;margin-top:6px}
+  .drop img{max-width:200px;max-height:200px;border-radius:6px;border:3px solid var(--noir)}
+
+  /* camera */
+  .or-sep{display:flex;align-items:center;text-align:center;margin:16px 0;color:#999;font-weight:600;font-size:13px}
+  .or-sep::before,.or-sep::after{content:"";flex:1;height:2px;background:#ddd}
+  .or-sep span{padding:0 14px}
+  .cam-btn{width:100%;background:var(--bleu-vif);color:#fff;font-family:'Anton';font-size:20px;text-transform:uppercase;
+    border:3px solid var(--noir);padding:13px;cursor:pointer;border-radius:4px;box-shadow:4px 4px 0 var(--noir);
+    transition:transform .1s,box-shadow .1s}
+  .cam-btn:hover{background:var(--bleu)}
+  .cam-btn:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--noir)}
+  .camera{display:none;margin-top:16px;text-align:center}
+  .camera.show{display:block}
+  .camera video{width:100%;max-width:360px;border:3px solid var(--noir);border-radius:6px;background:#000;transform:scaleX(-1)}
+  .cam-actions{display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+  .cam-shoot{background:var(--rouge);color:#fff;font-family:'Anton';font-size:20px;text-transform:uppercase;
+    border:3px solid var(--noir);padding:11px 24px;cursor:pointer;border-radius:4px;box-shadow:4px 4px 0 var(--noir)}
+  .cam-shoot:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--noir)}
+  .cam-cancel{background:#fff;color:var(--noir);font-family:'Archivo';font-weight:800;text-transform:uppercase;font-size:14px;
+    border:3px solid var(--noir);padding:11px 20px;cursor:pointer;border-radius:4px}
+
+  .looks{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px}
+  .look{border:3px solid var(--noir);border-radius:6px;padding:20px;cursor:pointer;background:#fff;text-align:center;
+    transition:transform .1s,box-shadow .1s;position:relative}
+  .look:hover{transform:translateY(-3px)}
+  .look.sel{background:var(--or);box-shadow:5px 5px 0 var(--noir)}
+  .look .emoji{font-size:46px;display:block;margin-bottom:8px}
+  .look h4{font-family:'Anton';text-transform:uppercase;font-size:19px;color:var(--bleu)}
+  .look p{font-size:12px;color:#555;margin-top:4px}
+  .look.sel p,.look.sel h4{color:var(--noir)}
+
+  .go{width:100%;margin-top:24px;background:var(--bleu);color:#fff;font-family:'Anton';font-size:26px;text-transform:uppercase;
+    border:3px solid var(--noir);padding:18px;cursor:pointer;box-shadow:6px 6px 0 var(--noir);transition:transform .1s,box-shadow .1s}
+  .go:hover{background:var(--bleu-vif)}
+  .go:active{transform:translate(6px,6px);box-shadow:0 0 0 var(--noir)}
+  .go:disabled{background:#9aa;cursor:not-allowed;box-shadow:6px 6px 0 #555;opacity:.7}
+
+  .privacy{font-size:12px;color:#666;margin-top:14px;text-align:center}
+
+  /* result */
+  .result{display:none;text-align:center;padding:10px 0}
+  .result.show{display:block}
+  .result img{max-width:320px;width:100%;border:4px solid var(--noir);border-radius:6px;box-shadow:8px 8px 0 var(--rouge)}
+  .share{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+  .share a,.share button{font-family:'Archivo';font-weight:800;text-transform:uppercase;font-size:13px;letter-spacing:.05em;
+    border:3px solid var(--noir);padding:11px 18px;cursor:pointer;text-decoration:none;color:#fff;background:var(--bleu);
+    border-radius:4px;transition:transform .1s}
+  .share a:hover,.share button:hover{transform:translateY(-2px)}
+  .share .wa{background:#25D366;color:#053} .share .ig{background:#d6249f}
+  .share .x{background:#111} .share .dl{background:var(--rouge)}
+
+  .loading{display:none;text-align:center;padding:30px}
+  .loading.show{display:block}
+  .ball{font-size:50px;display:inline-block;animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ===== trivia ===== */
+  .trivia{margin:60px 0}
+  .trivia h2{font-family:'Anton';text-transform:uppercase;font-size:clamp(30px,6vw,56px);text-align:center;margin-bottom:8px}
+  .trivia .sub{text-align:center;color:#aab6e8;margin-bottom:26px}
+  .card{background:var(--blanc);color:var(--noir);border:3px solid var(--noir);border-radius:6px;padding:24px 26px;
+    box-shadow:7px 7px 0 var(--or);font-size:18px;font-weight:600;min-height:90px;display:flex;align-items:center}
+  .card-nav{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+  .card-nav button{font-family:'Anton';font-size:22px;background:var(--rouge);color:#fff;border:3px solid var(--noir);
+    width:54px;height:48px;cursor:pointer;border-radius:4px}
+  .card-nav span{font-family:'Archivo';font-weight:800;color:#aab6e8}
+
+  /* ===== faq ===== */
+  .faq{margin:50px 0}
+  .faq h2{font-family:'Anton';text-transform:uppercase;font-size:clamp(28px,5vw,48px);text-align:center;margin-bottom:26px}
+  details{background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.15);border-radius:6px;padding:16px 20px;margin-bottom:12px}
+  summary{font-weight:800;cursor:pointer;font-size:17px;list-style:none}
+  summary::after{content:"+";float:right;font-family:'Anton';color:var(--or)}
+  details[open] summary::after{content:"–"}
+  details p{margin-top:12px;color:#cfd8ff;font-weight:400}
+
+  footer{border-top:3px solid rgba(255,255,255,.15);padding:30px 0 50px;text-align:center;font-size:13px;color:#8a97cc}
+  footer b{font-family:'Anton';color:var(--or);font-size:18px;display:block;margin-bottom:8px;letter-spacing:.05em}
+  .disclaimer{font-size:11px;color:#6b78ac;margin-top:14px;max-width:560px;margin-left:auto;margin-right:auto}
+
+  @media(max-width:560px){.looks{grid-template-columns:1fr}.gen{box-shadow:6px 6px 0 var(--rouge)}}
+</style>
+</head>
+<body>
+
+<div class="marquee"><span>⚽ MEXICO 86 • MOUSTACHE OBLIGATOIRE • MULET DE LÉGENDE • ⚽ MEXICO 86 • MOUSTACHE OBLIGATOIRE • MULET DE LÉGENDE • ⚽ MEXICO 86 • MOUSTACHE OBLIGATOIRE • MULET DE LÉGENDE •</span></div>
+
+<header>
+  <div class="wrap">
+    <span class="badge">⚽ Générateur non-officiel • Coupe du Monde 1986</span>
+    <h1>Deviens un<span class="yr">Bleu de 86</span></h1>
+    <p class="tag">Upload ta photo et découvre à quoi tu ressemblerais avec la moustache, le mulet et le maillot bleu de la génération <b>Platini–Giresse–Tigana</b>. 🥸</p>
+    <div class="tricolor"></div>
+    <a class="cta-main" href="#generateur">⚽ C'est parti, gratos</a>
+    <div class="stats">
+      <div class="stat"><b>3e</b><span>Mondial 86</span></div>
+      <div class="stat"><b>100%</b><span>Moustache 80s</span></div>
+      <div class="stat"><b>2/jour</b><span>Looks gratuits</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- GENERATOR -->
+  <section class="gen" id="generateur">
+    <div class="gen-head">⚽ Le Générateur</div>
+    <div class="gen-body">
+
+      <div id="form">
+        <div class="step-label">1 · Ta photo
+          <small>Une photo de face, bien éclairée, sans lunettes de soleil ni casquette = meilleur résultat.</small>
+        </div>
+        <label class="drop" id="drop">
+          <input type="file" id="file" accept="image/*" hidden>
+          <div id="dropContent">
+            <p>📸 Glisse ta photo ici ou clique pour choisir</p>
+            <div class="hint">JPG, PNG ou WebP — max 10 Mo</div>
+          </div>
+        </label>
+
+        <div class="or-sep"><span>— ou —</span></div>
+        <button type="button" class="cam-btn" id="camOpen">📷 Prendre une photo</button>
+
+        <!-- live camera capture -->
+        <div class="camera" id="camera">
+          <video id="video" autoplay playsinline></video>
+          <div class="cam-actions">
+            <button type="button" class="cam-shoot" id="shoot">📸 Capturer</button>
+            <button type="button" class="cam-cancel" id="camCancel">Annuler</button>
+          </div>
+        </div>
+        <canvas id="canvas" hidden></canvas>
+
+        <div class="step-label" style="margin-top:26px">2 · Ton look 86
+          <small>Lequel te correspond ?</small>
+        </div>
+        <div class="looks">
+          <div class="look sel" data-look="homme">
+            <span class="emoji">🥸</span>
+            <h4>Look Homme</h4>
+            <p>Mulet bouclé + grosse moustache, sueur mexicaine incluse</p>
+          </div>
+          <div class="look" data-look="femme">
+            <span class="emoji">💇‍♀️</span>
+            <h4>Look Femme</h4>
+            <p>Permanente volumineuse, glamour 80s à fond</p>
+          </div>
+        </div>
+
+        <button class="go" id="go" disabled>⚽ Génère mon look 86 !</button>
+        <p class="privacy">🔒 Ta photo n'est jamais stockée. Elle sert uniquement à générer ton image, puis elle est supprimée. C'est juste pour le fun.</p>
+      </div>
+
+      <div class="loading" id="loading">
+        <div class="ball">⚽</div>
+        <p style="font-family:'Anton';font-size:22px;color:var(--bleu);margin-top:10px">On te met la moustache…</p>
+        <p style="color:#666;font-size:14px">Direction Mexico 86 🇲🇽</p>
+      </div>
+
+      <div class="result" id="result">
+        <div class="step-label" style="text-align:center">🎉 Ton look 86 est prêt !</div>
+        <img id="resultImg" alt="Ton look Bleus 86">
+        <div class="share">
+          <a class="dl" id="dlBtn" download="mon-look-bleus86.png">⬇️ Télécharger</a>
+          <a class="wa" id="waBtn" target="_blank">WhatsApp</a>
+          <a class="x" id="xBtn" target="_blank">X / Twitter</a>
+          <button class="ig" id="igBtn">Instagram</button>
+        </div>
+        <button class="go" id="again" style="margin-top:18px;background:var(--rouge)">🔄 Recommencer</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TRIVIA -->
+  <section class="trivia">
+    <h2>🇫🇷 Le sais-tu ?</h2>
+    <p class="sub">La légende des Bleus de 1986</p>
+    <div class="card" id="triviaCard"></div>
+    <div class="card-nav">
+      <button id="prev">‹</button>
+      <span id="triviaCount"></span>
+      <button id="next">›</button>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq">
+    <h2>Questions fréquentes</h2>
+    <details><summary>Combien de looks puis-je générer ?</summary><p>Jusqu'à 2 looks gratuits par jour et par appareil. Le compteur se remet à zéro chaque nuit.</p></details>
+    <details><summary>Mes photos sont-elles stockées ?</summary><p>Non. Ta photo sert uniquement à générer ton look 86, puis elle est immédiatement supprimée. On ne stocke aucune image.</p></details>
+    <details><summary>C'est officiel, de la FFF ?</summary><p>Non. Bleus 86 est un outil de fan, non-officiel et gratuit, sans aucun lien avec la FFF, l'UEFA ou la FIFA. C'est juste pour le plaisir et la nostalgie.</p></details>
+    <details><summary>Le résultat est bizarre / ça ne charge pas ?</summary><p>Le serveur IA peut être surchargé aux heures de pointe. Attends quelques secondes et réessaie, ou recharge la page.</p></details>
+  </section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <b>BLEUS 86 ⚽🥸</b>
+    Un outil de fan gratuit pour les nostalgiques des Bleus. Partage ton look et rends tes potes jaloux !
+    <p class="disclaimer">© 2026 Bleus 86 — Non affilié à la FFF, l'UEFA ou la FIFA. 🔒 Aucune photo n'est stockée — c'est juste pour le fun.</p>
+  </div>
+</footer>
+
+<script>
+/* ============================================================
+   FRONT-END LOGIC  —  MVP
+   To go live: replace generateLook() with a real call to your
+   image-gen endpoint (see comment block inside the function).
+   ============================================================ */
+
+let selectedLook = 'homme';
+let uploadedFile = null;
+
+// --- look selection ---
+document.querySelectorAll('.look').forEach(el=>{
+  el.addEventListener('click',()=>{
+    document.querySelectorAll('.look').forEach(l=>l.classList.remove('sel'));
+    el.classList.add('sel');
+    selectedLook = el.dataset.look;
+  });
+});
+
+// --- upload ---
+const drop = document.getElementById('drop');
+const fileInput = document.getElementById('file');
+const dropContent = document.getElementById('dropContent');
+const goBtn = document.getElementById('go');
+
+fileInput.addEventListener('change', e=>handleFile(e.target.files[0]));
+drop.addEventListener('dragover', e=>{e.preventDefault();drop.style.background='#eef2ff'});
+drop.addEventListener('dragleave', ()=>drop.style.background='');
+drop.addEventListener('drop', e=>{
+  e.preventDefault(); drop.style.background='';
+  if(e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+});
+
+function handleFile(f){
+  if(!f) return;
+  if(f.size > 10*1024*1024){ alert('Photo trop lourde (max 10 Mo).'); return; }
+  uploadedFile = f;
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    drop.classList.add('has');
+    dropContent.innerHTML = '<img src="'+ev.target.result+'" alt="aperçu"><p style="margin-top:10px;color:var(--rouge)">✓ Photo prête — clique pour changer</p>';
+    goBtn.disabled = false;
+  };
+  reader.readAsDataURL(f);
+}
+
+// --- camera capture ---
+const camOpen = document.getElementById('camOpen');
+const camera = document.getElementById('camera');
+const video = document.getElementById('video');
+const canvas = document.getElementById('canvas');
+const shoot = document.getElementById('shoot');
+const camCancel = document.getElementById('camCancel');
+let stream = null;
+
+camOpen.addEventListener('click', async ()=>{
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    alert("Ton navigateur ne permet pas la prise de photo. Utilise plutôt l'upload. 📁");
+    return;
+  }
+  try{
+    stream = await navigator.mediaDevices.getUserMedia({
+      video:{ facingMode:'user', width:{ideal:1280}, height:{ideal:1280} },
+      audio:false
+    });
+    video.srcObject = stream;
+    camera.classList.add('show');
+    camOpen.style.display = 'none';
+    camera.scrollIntoView({behavior:'smooth', block:'center'});
+  }catch(err){
+    alert("Accès à la caméra refusé. Vérifie les autorisations de ton navigateur, ou utilise l'upload. 📁");
+  }
+});
+
+function stopCamera(){
+  if(stream){ stream.getTracks().forEach(t=>t.stop()); stream = null; }
+  camera.classList.remove('show');
+  camOpen.style.display = '';
+}
+
+camCancel.addEventListener('click', stopCamera);
+
+shoot.addEventListener('click', ()=>{
+  if(!stream) return;
+  const w = video.videoWidth, h = video.videoHeight;
+  canvas.width = w; canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  // mirror horizontally so the captured photo matches the live preview
+  ctx.translate(w, 0); ctx.scale(-1, 1);
+  ctx.drawImage(video, 0, 0, w, h);
+  canvas.toBlob(blob=>{
+    if(!blob){ alert('Capture impossible, réessaie.'); return; }
+    const file = new File([blob], 'photo-camera.png', {type:'image/png'});
+    stopCamera();
+    handleFile(file); // reuse the same preview + validation flow as upload
+  }, 'image/png', 0.92);
+});
+
+// --- generate ---
+const loading = document.getElementById('loading');
+const form = document.getElementById('form');
+const result = document.getElementById('result');
+const resultImg = document.getElementById('resultImg');
+
+goBtn.addEventListener('click', generateLook);
+document.getElementById('again').addEventListener('click', ()=>{
+  result.classList.remove('show'); form.style.display='block';
+});
+
+async function generateLook(){
+  form.style.display='none';
+  loading.classList.add('show');
+
+  try {
+    const fd = new FormData();
+    fd.append('photo', uploadedFile);
+    fd.append('look', selectedLook);
+
+    const r = await fetch('/api/generate', { method:'POST', body: fd });
+    const data = await r.json().catch(()=>({}));
+
+    if (!r.ok) {
+      // server returned an error (rate limit, overloaded, bad photo, etc.)
+      loading.classList.remove('show');
+      form.style.display='block';
+      alert(data.message || data.error || "Une erreur est survenue, réessaie dans un instant.");
+      return;
+    }
+
+    showResult(data.imageUrl);   // data:image/png;base64,... from the Worker
+  } catch (err) {
+    loading.classList.remove('show');
+    form.style.display='block';
+    alert("Connexion impossible au générateur. Vérifie ta connexion et réessaie.");
+  }
+}
+
+function showResult(url){
+  loading.classList.remove('show');
+  resultImg.src = url;
+  result.classList.add('show');
+
+  const shareUrl = encodeURIComponent(location.href);
+  const text = encodeURIComponent("Regarde mon look des Bleus de 86 ! 🥸⚽ Génère le tien :");
+  document.getElementById('dlBtn').href = url;
+  document.getElementById('waBtn').href = 'https://wa.me/?text='+text+'%20'+shareUrl;
+  document.getElementById('xBtn').href  = 'https://twitter.com/intent/tweet?text='+text+'&url='+shareUrl;
+  document.getElementById('igBtn').onclick = ()=>{
+    alert("Télécharge ton image puis poste-la en story Instagram avec #Bleus86 ! 📲");
+  };
+  result.scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+// --- trivia carousel ---
+const facts = [
+  "🥸 En 1986, la moustache n'était pas une option : c'était l'uniforme officieux des Bleus.",
+  "⚽ Michel Platini a inscrit le penalty décisif face au Brésil en quart de finale — un match devenu mythique à Guadalajara.",
+  "🇲🇽 La génération 86 a atteint la demi-finale du Mondial au Mexique, sous une chaleur écrasante.",
+  "💇 Le mulet — court devant, long derrière — était LA coupe de référence de toute une génération de footballeurs.",
+  "🏆 Deux ans plus tôt, en 1984, cette même génération offrait à la France son tout premier titre majeur : l'Euro à domicile.",
+  "🎵 Le 'carré magique' Platini–Giresse–Tigana–Fernandez faisait danser le milieu de terrain comme personne.",
+  "🌞 Pour résister à l'altitude et à la chaleur mexicaines, les Bleus s'étaient préparés dans des conditions extrêmes.",
+  "😢 La demi-finale 1986 face à la RFA reste l'une des grandes désillusions du foot français — la revanche de Séville 82 n'aura pas lieu."
+];
+let fi = 0;
+const card = document.getElementById('triviaCard');
+const count = document.getElementById('triviaCount');
+function renderFact(){ card.textContent = facts[fi]; count.textContent = (fi+1)+' / '+facts.length; }
+document.getElementById('next').onclick = ()=>{ fi=(fi+1)%facts.length; renderFact(); };
+document.getElementById('prev').onclick = ()=>{ fi=(fi-1+facts.length)%facts.length; renderFact(); };
+renderFact();
+</script>
+</body>
+</html>

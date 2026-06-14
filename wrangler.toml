@@ -1,0 +1,27 @@
+# Cloudflare Worker config for Bleus 86
+# This file tells Cloudflare how to deploy the project from GitHub.
+
+name = "bleus86"
+main = "worker.js"
+compatibility_date = "2025-06-01"
+
+# Serve the static site (public/index.html) via the ASSETS binding.
+# The Worker (worker.js) intercepts /api/generate and lets everything
+# else fall through to these static files.
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+# KV namespace for the 2-per-day rate limit.
+# The "id" below is a PLACEHOLDER — you'll replace it with the real
+# namespace ID after creating the KV namespace in the Cloudflare
+# dashboard (instructions provided separately). Until then, deployment
+# still works; the limit is simply skipped if the id is invalid.
+[[kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+
+# NOTE: The GEMINI_API_KEY is a SECRET — it is NOT stored in this file.
+# You add it in the Cloudflare dashboard (Worker > Settings > Variables
+# and Secrets) AFTER the first deploy, or via the dashboard secret UI.
+# Never commit your API key to GitHub.
