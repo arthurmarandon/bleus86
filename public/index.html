@@ -246,10 +246,8 @@
         <div class="step-label" style="text-align:center">🎉 Ton look 86 est prêt !</div>
         <img id="resultImg" alt="Ton look Bleus 86">
         <div class="share">
+          <button class="ig" id="igBtn">📲 Partager mon look</button>
           <a class="dl" id="dlBtn" download="mon-look-bleus86.png">⬇️ Télécharger</a>
-          <a class="wa" id="waBtn" target="_blank">WhatsApp</a>
-          <a class="x" id="xBtn" target="_blank">X / Twitter</a>
-          <button class="ig" id="igBtn">📲 Partager l'image</button>
         </div>
         <button class="go" id="again" style="margin-top:18px;background:var(--rouge)">🔄 Recommencer</button>
       </div>
@@ -431,16 +429,7 @@ function showResult(url){
   result.classList.add('show');
   window._lastImageUrl = url; // remember for native share
 
-  // \uD83E\uDD78 = disguised-face emoji, \u26BD = soccer ball (Unicode escapes
-  // survive any file encoding, unlike pasting the raw emoji).
-  const msg = "Regarde mon look des Bleus de 86 ! \uD83E\uDD78\u26BD G\u00E9n\u00E8re le tien :";
-  const pageUrl = "https://bleus86.fr";
-  const text = encodeURIComponent(msg);
-  const shareUrl = encodeURIComponent(pageUrl);
-
   document.getElementById('dlBtn').href = url;
-  document.getElementById('waBtn').href = 'https://wa.me/?text='+text+'%20'+shareUrl;
-  document.getElementById('xBtn').href  = 'https://twitter.com/intent/tweet?text='+text+'&url='+shareUrl;
   document.getElementById('igBtn').onclick = shareNative;
 
   result.scrollIntoView({behavior:'smooth', block:'center'});
