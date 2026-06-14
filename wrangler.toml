@@ -19,7 +19,7 @@ binding = "ASSETS"
 # still works; the limit is simply skipped if the id is invalid.
 [[kv_namespaces]]
 binding = "RATE_LIMIT_KV"
-id = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+id = "9a46a8dda9c44cad8a28a74b80544ea3"
 
 # NOTE: The GEMINI_API_KEY is a SECRET — it is NOT stored in this file.
 # You add it in the Cloudflare dashboard (Worker > Settings > Variables
