@@ -14,29 +14,94 @@
 
 // ---- CONFIG ---------------------------------------------------------------
 const MODEL = "gemini-2.5-flash-image";       // swap to a newer image model here if desired
-const DAILY_LIMIT = 2;                          // free generations per device per day
+const DAILY_LIMIT = 100;                          // free generations per device per day
 const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;      // 10 MB
 
-// ---- PROMPTS (from VISUAL_RECIPES.md) ------------------------------------
-const SYSTEM = `You are transforming an uploaded portrait into a member of the 1986 France national football team (the "Mexico 86" squad). CRITICAL RULES: Preserve the subject's facial identity, bone structure, skin tone, and expression exactly. Do NOT beautify, slim, or alter the face — keep it clearly recognizable. Only change hairstyle, facial hair, clothing, and background. Photoreal 1980s analog film look: slight grain, warm Kodachrome tones, soft flash. Square 1:1 head-and-shoulders framing like a 1986 team photo / Panini sticker. No text, no real-brand logos, no FIFA/FFF/Adidas marks — use a generic royal-blue football shirt. Output one clean image.`;
+// ---- PROMPTS --------------------------------------------------------------
+// Shared rules. Note the deliberate "spice": we EXAGGERATE the 1980s STYLING
+// (hair volume, mustache, sweaty glow) for comedic/viral effect, while keeping
+// the FACE strictly recognizable — distorting the face is what makes these
+// tools feel creepy and kills shares, so we never touch it.
+const SYSTEM = `You are transforming an uploaded portrait into a member of the 1986 France national football team (the "Mexico 86" squad), in the style of a vintage Panini sticker card.
+CRITICAL RULES:
+- Preserve the subject's facial identity, bone structure, skin tone, and expression EXACTLY. Keep the face clearly recognizable — do NOT beautify, slim, age, or distort it.
+- You MAY exaggerate the 1980s STYLING for comedic effect: bigger hair, bolder mustache, glossier sweaty sun-glow, more saturated retro colors. Push the era hard. Never push the face.
+- Only change hairstyle, facial hair, clothing, background, and add the caption described below.
+- Photoreal 1980s analog film look: visible film grain, warm Kodachrome tones, slight soft flash, faded edges.
+- Square 1:1 head-and-shoulders framing, like a 1986 Panini football sticker portrait.
+- Use a generic royal-blue football shirt with a white collar and thin red-and-white shoulder trim. NO real-brand logos, NO FIFA/FFF/Adidas marks, no modern branding.`;
 
-const PROMPTS = {
-  homme: `${SYSTEM}
-Transform this person into a 1986 France footballer.
-HAIR: thick voluminous early-80s style — feathered on top with a curly/permed mullet, longer at the back, slightly sweat-damp as if mid-tournament in the Mexican heat.
-FACIAL HAIR: a bushy 1980s mustache, density adapted to look natural on this face.
-KIT: a plain royal-blue 1980s football shirt with a simple white collar and thin red-and-white shoulder trim, vintage matte fabric, no branding.
+// Caption instruction appended last so the model burns the epithet into the image.
+function captionRule(epithet) {
+  return `
+CAPTION: Across the BOTTOM of the image, add a clean vintage Panini-style caption banner with the exact text "${epithet}" in bold retro 1980s sticker lettering (white or gold text on a royal-blue strip). Spell it EXACTLY as written, correct French spelling, no other text anywhere else on the image.`;
+}
+
+// --- Male archetypes (one picked at random per generation for variety) -----
+const MALE_STYLES = [
+  // 1. The classic permed mullet + mustache
+  `HAIR: thick voluminous permed MULLET — curly feathered volume on top, distinctly longer at the back, slightly sweat-damp from the Mexican heat. Push the volume for comedic 80s effect.
+FACIAL HAIR: a big bushy 1980s mustache, adapted to look natural but generously full.`,
+  // 2. The feathered "footballer flick" (no mullet) — tidier star-player look
+  `HAIR: a glamorous mid-80s feathered hairstyle, parted, blow-dried with lots of body and a soft flick — the elegant "playmaker / star" look, not a mullet.
+FACIAL HAIR: light designer stubble or a neat thin mustache, whichever suits the face.`,
+  // 3. The tight curly perm / afro-perm — full-on 80s curls
+  `HAIR: a big tight curly PERM / afro-perm, rounded high volume, the unmistakable 80s footballer curls, slightly damp and bouncy.
+FACIAL HAIR: a full horseshoe 1980s mustache, bold and proud.`,
+];
+
+// --- Female archetypes ------------------------------------------------------
+const FEMALE_STYLES = [
+  `HAIR: enormous voluminous 1980s permed hair — full body, soft bouncy curls, big height and volume, feathered fringe, the quintessential 80s blowout, slightly windswept. Push the volume for fun 80s drama.
+MAKEUP: tasteful period 80s makeup (warm blush, soft eye), natural on the subject's real features. Do NOT change face shape.`,
+  `HAIR: a big crimped/teased 80s style with feathered bangs and lots of height, bold and glamorous but tasteful.
+MAKEUP: subtle warm 80s tones, natural on the subject's real features. Do NOT change face shape.`,
+];
+
+const SCENE = `
+KIT: a plain royal-blue 1980s football shirt with a white collar and thin red-and-white shoulder trim, vintage matte fabric.
 BACKGROUND: a sun-drenched 1986 stadium pitch, slightly faded, shallow depth of field.
-MOOD: proud, squinting slightly into bright sunlight, classic team-photo posture.`,
+MOOD: proud, confident, squinting slightly into bright sunlight, classic team-photo posture.`;
 
-  femme: `${SYSTEM}
-Transform this person into an iconic mid-1980s glamour portrait, styled as a France '86 superfan of the era.
-HAIR: big voluminous 1980s permed hair — full body, soft curls, height and volume, feathered fringe, the quintessential 80s blowout, slightly windswept.
-MAKEUP: subtle period 80s makeup (warm blush, soft eye), tasteful and natural on the subject's real features. Do NOT change face shape or identity.
-OUTFIT: a plain royal-blue 80s football shirt or blue supporter top with a white collar, optional thin red-white-blue trim, vintage matte fabric, no branding.
+// --- Epithets: catchy 1986-flavored player nicknames, picked at random ------
+// Tied to the real archetypes of that France side (the "carré magique" midfield,
+// the libero, the poacher, the keeper, the hard man, etc.) — kept generic, no real names.
+const EPITHETS = [
+  "LE MAESTRO",
+  "LE GÉNÉRAL DU MILIEU",
+  "LE ROC DE LA DÉFENSE",
+  "LE RENARD DES SURFACES",
+  "LE MÉTRONOME",
+  "LE LIBÉRO DE LÉGENDE",
+  "LE DERNIER REMPART",
+  "LE FEU FOLLET",
+  "LE PATRON",
+  "LA GÂCHETTE",
+  "LE CHEF D'ORCHESTRE",
+  "LE MUR INFRANCHISSABLE",
+  "LE NUMÉRO 10 DE RÊVE",
+  "LE TANK DU COULOIR",
+  "LA TERREUR DES ATTAQUANTS",
+];
+
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+// Build a full prompt for a given look, with a random style + random epithet.
+function buildPrompt(look) {
+  const epithet = pick(EPITHETS);
+  if (look === "femme") {
+    return `${SYSTEM}
+Transform this person into an iconic mid-1980s France '86 portrait.
+${pick(FEMALE_STYLES)}
+OUTFIT: a royal-blue 80s football shirt or blue supporter top with a white collar and thin red-white trim, vintage matte fabric.
 BACKGROUND: a sun-drenched 1986 stadium, faded, shallow depth of field.
-MOOD: confident, glamorous, smiling, classic 80s portrait energy.`
-};
+MOOD: confident, glamorous, smiling, classic 80s portrait energy.${captionRule(epithet)}`;
+  }
+  // default: homme
+  return `${SYSTEM}
+Transform this person into a 1986 France footballer.
+${pick(MALE_STYLES)}${SCENE}${captionRule(epithet)}`;
+}
 
 // ---- HELPERS --------------------------------------------------------------
 const cors = {
@@ -97,7 +162,7 @@ export default {
       if (!photo || typeof photo === "string") return json({ error: "Aucune photo reçue." }, 400);
       if (photo.size > MAX_UPLOAD_BYTES) return json({ error: "Photo trop lourde (max 10 Mo)." }, 400);
 
-      const prompt = PROMPTS[look] || PROMPTS.homme;
+      const prompt = buildPrompt(look);
       const buf = await photo.arrayBuffer();
       const b64 = arrayBufferToBase64(buf);
       const mime = photo.type || "image/jpeg";
