@@ -26,7 +26,7 @@
 <meta name="twitter:description" content="Transforme ta photo en footballeur des Bleus de 1986 : moustache, mulet, style années 80. Gratuit.">
 <meta name="twitter:image" content="https://bleus86.fr/og-image.jpg">
 
-<meta name="theme-color" content="#0a2472">
+<meta name="theme-color" content="#1a3866">
 
 <!-- Structured data: helps Google understand what this page is -->
 <script type="application/ld+json">
@@ -48,12 +48,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:ital,wght@0,400;0,600;0,800;1,400&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bleu:#0a2472;        /* deep France blue */
-    --bleu-vif:#1b4dd8;    /* vivid blue */
-    --blanc:#f7f4ec;       /* warm vintage white */
-    --rouge:#e63027;       /* France red */
-    --or:#f2c14e;          /* warm 80s gold */
-    --noir:#13131a;
+    --bleu:#1a3866;        /* faded 1986-print France blue */
+    --bleu-vif:#2f5aa8;    /* muted vivid blue */
+    --blanc:#efe9d8;       /* aged newsprint white */
+    --rouge:#bb3b32;       /* faded print red */
+    --or:#d6ac57;          /* tarnished 80s gold */
+    --noir:#1b1b22;
     --grain:rgba(0,0,0,.04);
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -67,17 +67,18 @@
   }
   /* vintage grain overlay */
   body::after{
-    content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.5;
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.28;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
     mix-blend-mode:overlay;
   }
   .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
 
-  /* ===== marquee ===== */
-  .marquee{background:var(--rouge);color:var(--blanc);font-family:'Anton';letter-spacing:.05em;
-    text-transform:uppercase;white-space:nowrap;overflow:hidden;padding:8px 0;font-size:14px;border-bottom:3px solid var(--noir)}
-  .marquee span{display:inline-block;animation:scroll 18s linear infinite;padding-left:100%}
-  @keyframes scroll{to{transform:translateX(-100%)}}
+  /* ===== broadcast bar (was scrolling marquee) ===== */
+  .marquee{background:var(--noir);color:var(--blanc);font-family:'Archivo';font-weight:800;letter-spacing:.22em;
+    text-transform:uppercase;text-align:center;padding:9px 16px;font-size:12px;border-bottom:2px solid var(--rouge);
+    display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+  .marquee span{display:inline-flex;align-items:center;gap:14px}
+  .marquee .sep{color:var(--or)}
 
   /* ===== hero ===== */
   header{padding:34px 0 20px;text-align:center;position:relative}
@@ -85,14 +86,14 @@
     text-transform:uppercase;font-size:12px;letter-spacing:.12em;padding:6px 14px;border-radius:30px;margin-bottom:18px;
     border:2px solid var(--noir)}
   h1{font-family:'Anton';font-size:clamp(52px,13vw,140px);line-height:.86;text-transform:uppercase;letter-spacing:-.01em;
-    color:var(--blanc);text-shadow:5px 5px 0 var(--rouge),10px 10px 0 var(--noir)}
+    color:var(--blanc);text-shadow:3px 3px 0 var(--rouge)}
   h1 .yr{color:var(--or);display:block}
   .tag{font-size:clamp(16px,2.4vw,22px);max-width:560px;margin:22px auto 0;font-weight:600;color:#cfd8ff}
   .tricolor{height:8px;width:160px;margin:24px auto 0;background:linear-gradient(90deg,var(--bleu-vif) 0 33%,var(--blanc) 33% 66%,var(--rouge) 66% 100%);border:2px solid var(--noir)}
 
   .cta-main{display:inline-block;margin-top:30px;background:var(--rouge);color:#fff;font-family:'Anton';font-size:24px;
     text-transform:uppercase;letter-spacing:.03em;text-decoration:none;padding:16px 40px;border:3px solid var(--noir);
-    box-shadow:6px 6px 0 var(--noir);transition:transform .1s,box-shadow .1s;cursor:pointer}
+    box-shadow:0 6px 16px rgba(0,0,0,.25);transition:transform .1s,box-shadow .1s;cursor:pointer}
   .cta-main:active{transform:translate(6px,6px);box-shadow:0 0 0 var(--noir)}
 
   .stats{display:flex;gap:30px;justify-content:center;flex-wrap:wrap;margin:40px 0 10px}
@@ -102,7 +103,7 @@
 
   /* ===== generator ===== */
   .gen{background:var(--blanc);color:var(--noir);border:4px solid var(--noir);border-radius:6px;margin:50px 0;
-    box-shadow:12px 12px 0 var(--rouge);overflow:hidden}
+    box-shadow:0 14px 30px rgba(0,0,0,.22);overflow:hidden}
   .gen-head{background:var(--bleu);color:#fff;padding:22px 26px;font-family:'Anton';font-size:26px;text-transform:uppercase;
     border-bottom:4px solid var(--noir)}
   .gen-body{padding:26px}
@@ -123,7 +124,7 @@
   .or-sep::before,.or-sep::after{content:"";flex:1;height:2px;background:#ddd}
   .or-sep span{padding:0 14px}
   .cam-btn{width:100%;background:var(--bleu-vif);color:#fff;font-family:'Anton';font-size:20px;text-transform:uppercase;
-    border:3px solid var(--noir);padding:13px;cursor:pointer;border-radius:4px;box-shadow:4px 4px 0 var(--noir);
+    border:3px solid var(--noir);padding:13px;cursor:pointer;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,.22);
     transition:transform .1s,box-shadow .1s}
   .cam-btn:hover{background:var(--bleu)}
   .cam-btn:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--noir)}
@@ -132,7 +133,7 @@
   .camera video{width:100%;max-width:360px;border:3px solid var(--noir);border-radius:6px;background:#000;transform:scaleX(-1)}
   .cam-actions{display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap}
   .cam-shoot{background:var(--rouge);color:#fff;font-family:'Anton';font-size:20px;text-transform:uppercase;
-    border:3px solid var(--noir);padding:11px 24px;cursor:pointer;border-radius:4px;box-shadow:4px 4px 0 var(--noir)}
+    border:3px solid var(--noir);padding:11px 24px;cursor:pointer;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,.22)}
   .cam-shoot:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--noir)}
   .cam-cancel{background:#fff;color:var(--noir);font-family:'Archivo';font-weight:800;text-transform:uppercase;font-size:14px;
     border:3px solid var(--noir);padding:11px 20px;cursor:pointer;border-radius:4px}
@@ -141,14 +142,14 @@
   .look{border:3px solid var(--noir);border-radius:6px;padding:20px;cursor:pointer;background:#fff;text-align:center;
     transition:transform .1s,box-shadow .1s;position:relative}
   .look:hover{transform:translateY(-3px)}
-  .look.sel{background:var(--or);box-shadow:5px 5px 0 var(--noir)}
+  .look.sel{background:var(--or);box-shadow:0 5px 14px rgba(0,0,0,.25)}
   .look .emoji{font-size:46px;display:block;margin-bottom:8px}
   .look h4{font-family:'Anton';text-transform:uppercase;font-size:19px;color:var(--bleu)}
   .look p{font-size:12px;color:#555;margin-top:4px}
   .look.sel p,.look.sel h4{color:var(--noir)}
 
   .go{width:100%;margin-top:24px;background:var(--bleu);color:#fff;font-family:'Anton';font-size:26px;text-transform:uppercase;
-    border:3px solid var(--noir);padding:18px;cursor:pointer;box-shadow:6px 6px 0 var(--noir);transition:transform .1s,box-shadow .1s}
+    border:3px solid var(--noir);padding:18px;cursor:pointer;box-shadow:0 6px 16px rgba(0,0,0,.25);transition:transform .1s,box-shadow .1s}
   .go:hover{background:var(--bleu-vif)}
   .go:active{transform:translate(6px,6px);box-shadow:0 0 0 var(--noir)}
   .go:disabled{background:#9aa;cursor:not-allowed;box-shadow:6px 6px 0 #555;opacity:.7}
@@ -158,14 +159,20 @@
   /* result */
   .result{display:none;text-align:center;padding:10px 0}
   .result.show{display:block}
-  .result img{max-width:320px;width:100%;border:4px solid var(--noir);border-radius:6px;box-shadow:8px 8px 0 var(--rouge)}
-  .share{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:20px}
-  .share a,.share button{font-family:'Archivo';font-weight:800;text-transform:uppercase;font-size:13px;letter-spacing:.05em;
-    border:3px solid var(--noir);padding:11px 18px;cursor:pointer;text-decoration:none;color:#fff;background:var(--bleu);
-    border-radius:4px;transition:transform .1s}
-  .share a:hover,.share button:hover{transform:translateY(-2px)}
-  .share .wa{background:#25D366;color:#053} .share .ig{background:#d6249f}
-  .share .x{background:#111} .share .dl{background:var(--rouge)}
+  .result img{max-width:320px;width:100%;border:4px solid var(--noir);border-radius:6px;box-shadow:0 10px 24px rgba(0,0,0,.25)}
+  .share-hint{font-size:13px;color:#666;margin:16px 0 6px;font-weight:600}
+  .share{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+  .share a,.share button{font-family:'Archivo';font-weight:800;text-transform:uppercase;font-size:13px;letter-spacing:.04em;
+    border:2px solid var(--noir);padding:12px 18px;cursor:pointer;text-decoration:none;color:#fff;
+    border-radius:5px;transition:transform .1s,filter .1s;display:inline-flex;align-items:center;gap:6px}
+  .share a:hover,.share button:hover{transform:translateY(-2px);filter:brightness(1.06)}
+  .share .sh-native{background:var(--bleu);flex-basis:100%;justify-content:center;font-size:15px;padding:14px}
+  .share .sh-wa{background:#25D366;color:#053} .share .sh-x{background:#111}
+  .share .sh-fb{background:#1877F2} .share .sh-dl{background:var(--rouge)}
+  @media(max-width:560px){
+    .share .sh-wa,.share .sh-x,.share .sh-fb,.share .sh-dl{flex:1;justify-content:center;min-width:0;
+      padding:11px 6px;font-size:11px;letter-spacing:.02em;gap:3px}
+  }
 
   .loading{display:none;text-align:center;padding:30px}
   .loading.show{display:block}
@@ -177,7 +184,7 @@
   .trivia h2{font-family:'Anton';text-transform:uppercase;font-size:clamp(30px,6vw,56px);text-align:center;margin-bottom:8px}
   .trivia .sub{text-align:center;color:#aab6e8;margin-bottom:26px}
   .card{background:var(--blanc);color:var(--noir);border:3px solid var(--noir);border-radius:6px;padding:24px 26px;
-    box-shadow:7px 7px 0 var(--or);font-size:18px;font-weight:600;min-height:90px;display:flex;align-items:center}
+    box-shadow:0 8px 20px rgba(0,0,0,.18);font-size:18px;font-weight:600;min-height:90px;display:flex;align-items:center}
   .card-nav{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
   .card-nav button{font-family:'Anton';font-size:22px;background:var(--rouge);color:#fff;border:3px solid var(--noir);
     width:54px;height:48px;cursor:pointer;border-radius:4px}
@@ -195,14 +202,14 @@
   /* ===== sponsor / annonceurs ===== */
   .sponsor{margin:60px 0}
   .sponsor-card{background:var(--blanc);color:var(--noir);border:4px solid var(--noir);border-radius:6px;
-    box-shadow:10px 10px 0 var(--or);padding:40px 32px;text-align:center}
+    box-shadow:0 12px 28px rgba(0,0,0,.2);padding:40px 32px;text-align:center}
   .sponsor-tag{display:inline-block;background:var(--bleu);color:#fff;font-family:'Archivo';font-weight:800;
     text-transform:uppercase;font-size:12px;letter-spacing:.12em;padding:6px 14px;border-radius:30px;border:2px solid var(--noir);margin-bottom:16px}
   .sponsor-card h2{font-family:'Anton';text-transform:uppercase;font-size:clamp(30px,6vw,52px);color:var(--bleu);line-height:.95;margin-bottom:14px}
   .sponsor-card p{max-width:560px;margin:0 auto;font-weight:500;color:#333;font-size:16px}
   .sponsor-btn{display:inline-block;margin-top:24px;background:var(--rouge);color:#fff;font-family:'Anton';font-size:22px;
     text-transform:uppercase;letter-spacing:.03em;text-decoration:none;padding:14px 34px;border:3px solid var(--noir);
-    box-shadow:5px 5px 0 var(--noir);transition:transform .1s,box-shadow .1s}
+    box-shadow:0 5px 14px rgba(0,0,0,.25);transition:transform .1s,box-shadow .1s}
   .sponsor-btn:active{transform:translate(5px,5px);box-shadow:0 0 0 var(--noir)}
   .sponsor-mini{margin-top:16px !important;font-size:13px !important;color:#666 !important}
 
@@ -210,20 +217,20 @@
   footer b{font-family:'Anton';color:var(--or);font-size:18px;display:block;margin-bottom:8px;letter-spacing:.05em}
   .disclaimer{font-size:11px;color:#6b78ac;margin-top:14px;max-width:560px;margin-left:auto;margin-right:auto}
 
-  @media(max-width:560px){.looks{grid-template-columns:1fr}.gen{box-shadow:6px 6px 0 var(--rouge)}}
+  @media(max-width:560px){.looks{grid-template-columns:1fr}.gen{box-shadow:0 8px 18px rgba(0,0,0,.22)}}
 </style>
 </head>
 <body>
 
-<div class="marquee"><span>⚽ MEXICO 86 • MOUSTACHE OBLIGATOIRE • MULET DE LÉGENDE • ⚽ MEXICO 86 • MOUSTACHE OBLIGATOIRE • MULET DE LÉGENDE • ⚽ MEXICO 86 • MOUSTACHE OBLIGATOIRE • MULET DE LÉGENDE •</span></div>
+<div class="marquee"><span>Mexico 86 <em class="sep">·</em> Moustache obligatoire <em class="sep">·</em> Mulet de légende</span></div>
 
 <header>
   <div class="wrap">
-    <span class="badge">⚽ Générateur non-officiel • Coupe du Monde 1986</span>
+    <span class="badge">Générateur non-officiel • Coupe du Monde 1986</span>
     <h1>Deviens un<span class="yr">Bleu de 86</span></h1>
     <p class="tag">Upload ta photo et découvre à quoi tu ressemblerais avec la moustache, le mulet et le maillot bleu de la génération <b>Platini–Giresse–Tigana</b>. 🥸</p>
     <div class="tricolor"></div>
-    <a class="cta-main" href="#generateur">⚽ C'est parti, gratos</a>
+    <a class="cta-main" href="#generateur">C'est parti, gratos</a>
     <div class="stats">
       <div class="stat"><b>3e</b><span>Mondial 86</span></div>
       <div class="stat"><b>100%</b><span>Moustache 80s</span></div>
@@ -236,7 +243,7 @@
 
   <!-- GENERATOR -->
   <section class="gen" id="generateur">
-    <div class="gen-head">⚽ Le Générateur</div>
+    <div class="gen-head">Le Générateur</div>
     <div class="gen-body">
 
       <div id="form">
@@ -280,7 +287,7 @@
           </div>
         </div>
 
-        <button class="go" id="go" disabled>⚽ Génère mon look 86 !</button>
+        <button class="go" id="go" disabled>Génère mon look 86</button>
         <p class="privacy">🔒 Ta photo n'est jamais stockée. Elle sert uniquement à générer ton image, puis elle est supprimée. C'est juste pour le fun.</p>
       </div>
 
@@ -293,9 +300,13 @@
       <div class="result" id="result">
         <div class="step-label" style="text-align:center">🎉 Ton look 86 est prêt !</div>
         <img id="resultImg" alt="Ton look Bleus 86">
+        <p class="share-hint">Partage ton look — c'est ce qui fait vivre le délire 🥸</p>
         <div class="share">
-          <button class="ig" id="igBtn">📲 Partager mon look</button>
-          <a class="dl" id="dlBtn" download="mon-look-bleus86.png">⬇️ Télécharger</a>
+          <button class="sh-native" id="shareBtn">📲 Partager</button>
+          <button class="sh-wa" id="waBtn">WhatsApp</button>
+          <button class="sh-x" id="xBtn">X</button>
+          <button class="sh-fb" id="fbBtn">Facebook</button>
+          <a class="sh-dl" id="dlBtn" download="mon-look-bleus86.png">⬇️ Image</a>
         </div>
         <button class="go" id="again" style="margin-top:18px;background:var(--rouge)">🔄 Recommencer</button>
       </div>
@@ -305,7 +316,7 @@
 
   <!-- TRIVIA -->
   <section class="trivia">
-    <h2>🇫🇷 Le sais-tu ?</h2>
+    <h2>Le sais-tu ?</h2>
     <p class="sub">La légende des Bleus de 1986</p>
     <div class="card" id="triviaCard"></div>
     <div class="card-nav">
@@ -327,7 +338,7 @@
   <!-- SPONSORS / ANNONCEURS -->
   <section class="sponsor">
     <div class="sponsor-card">
-      <span class="sponsor-tag">📣 Espace annonceurs</span>
+      <span class="sponsor-tag">Espace annonceurs</span>
       <h2>Votre marque ici</h2>
       <p>Bleus 86 est partagé par des milliers de fans de foot nostalgiques. Une marque, une boutique de maillots rétro ou un commerce français&nbsp;? Associez votre nom à la folie des Bleus de 86 et touchez une audience passionnée — directement sur le site et sur chaque image partagée.</p>
       <a class="sponsor-btn" href="mailto:contact@bleus86.fr?subject=Sponsoring%20Bleus%2086">✉️ Devenir annonceur</a>
@@ -491,15 +502,53 @@ function showResult(url){
   window._lastImageUrl = url; // remember for native share
 
   document.getElementById('dlBtn').href = url;
-  document.getElementById('igBtn').onclick = shareNative;
+
+  // Native share (mobile): shares the actual IMAGE — the most viral path.
+  document.getElementById('shareBtn').onclick = shareNative;
+
+  // WhatsApp: try to share the real IMAGE via the native sheet (WhatsApp shows
+  // up as a target there, with the message attached). Only if that's impossible
+  // (desktop / old browser) fall back to the text-only wa.me link.
+  document.getElementById('waBtn').onclick = ()=>
+    shareImageOrFallback('https://wa.me/?text=' + encodeURIComponent(MSG));
+
+  // X / Facebook: web share dialogs can only carry text + site link.
+  const shareUrl = 'https://bleus86.fr';
+  document.getElementById('xBtn').onclick = ()=>
+    openShare('https://twitter.com/intent/tweet?text=' + encodeURIComponent('Regarde mon look des Bleus de 86 🥸 Fais le tien sur') + '&url=' + encodeURIComponent(shareUrl));
+  document.getElementById('fbBtn').onclick = ()=>
+    openShare('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl));
 
   result.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
-// Native share sheet — on phones this can share the actual IMAGE (with the
+// shared message used by both the native button and the WhatsApp button
+const MSG = 'Regarde mon look des Bleus de 86 \uD83E\uDD78 Fais le tien sur bleus86.fr';
+
+function openShare(url){
+  window.open(url, '_blank', 'noopener,noreferrer,width=600,height=600');
+}
+
+// Try to share the generated IMAGE through the native sheet (where WhatsApp
+// appears as an option and DOES carry the picture). If file-sharing isn't
+// supported, open the provided text-link fallback instead.
+async function shareImageOrFallback(fallbackUrl){
+  try {
+    const res = await fetch(window._lastImageUrl);
+    const blob = await res.blob();
+    const file = new File([blob], 'mon-look-bleus86.png', { type: blob.type || 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], text: MSG });
+      return;
+    }
+  } catch (e) { /* user cancelled or unsupported — fall through */ }
+  openShare(fallbackUrl);
+}
+
+// Native share sheet — on phones this shares the actual IMAGE (with the
 // site URL baked in), which is far more viral than a text-only link.
 async function shareNative(){
-  const msg = "Mon look des Bleus de 86 ! \uD83E\uDD78\u26BD Cr\u00E9e le tien sur bleus86.fr";
+  const msg = MSG;
   try {
     const res = await fetch(window._lastImageUrl);
     const blob = await res.blob();
@@ -509,8 +558,14 @@ async function shareNative(){
       return;
     }
     if (navigator.share) { await navigator.share({ text: msg, url: 'https://bleus86.fr' }); return; }
-  } catch (e) { /* fall through to hint */ }
-  alert("T\u00E9l\u00E9charge ton image puis poste-la en story avec #Bleus86 ! \uD83D\uDCF2");
+  } catch (e) { /* fall through */ }
+  // Desktop / unsupported: copy the message and nudge to use a platform button.
+  try {
+    await navigator.clipboard.writeText(msg);
+    alert("Message copié ! Enregistre ton image (bouton Image) puis colle le message là où tu partages. \uD83D\uDCF2");
+  } catch (e) {
+    alert("Enregistre ton image puis partage-la avec le message : « " + msg + " » \uD83D\uDCF2");
+  }
 }
 
 // --- trivia carousel ---
