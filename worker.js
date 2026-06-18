@@ -177,23 +177,51 @@ export default {
             { text: prompt },
             { inline_data: { mime_type: mime, data: b64 } },
           ]}],
-          generationConfig: { responseModalities: ["IMAGE"] },
+          generationConfig: { responseModalities: ["TEXT", "IMAGE"] },
         }),
       });
 
       if (!gemRes.ok) {
         const errTxt = await gemRes.text();
-        console.log("Gemini error:", gemRes.status, errTxt);
+        console.log("Gemini HTTP error:", gemRes.status, errTxt.slice(0, 800));
+        // 429 = quota/rate limit on the Google side; tell the user plainly.
+        if (gemRes.status === 429) {
+          return json({ error: "Trop de demandes en ce moment, réessaie dans une minute. ⚽" }, 429);
+        }
+        // 400 often = bad model name / bad request / key lacks access to this model.
+        if (gemRes.status === 400 || gemRes.status === 403 || gemRes.status === 404) {
+          return json({ error: "Le générateur est temporairement indisponible. Réessaie bientôt." }, 502);
+        }
         return json({ error: "Le générateur est surchargé, réessaie dans quelques secondes." }, 502);
       }
 
       const data = await gemRes.json();
-      const parts = data?.candidates?.[0]?.content?.parts || [];
+      const candidate = data?.candidates?.[0];
+      const parts = candidate?.content?.parts || [];
       const imgPart = parts.find(p => p.inline_data || p.inlineData);
       const inline = imgPart?.inline_data || imgPart?.inlineData;
+
       if (!inline?.data) {
-        console.log("No image in response:", JSON.stringify(data).slice(0, 800));
-        return json({ error: "Génération impossible avec cette photo, essaie-en une autre." }, 502);
+        // Log everything we need to diagnose: why the model stopped, plus any
+        // text it returned instead of an image, plus prompt-feedback blocks.
+        const finishReason = candidate?.finishReason || data?.promptFeedback?.blockReason || "UNKNOWN";
+        const textBack = parts.map(p => p.text).filter(Boolean).join(" | ").slice(0, 300);
+        console.log("No image. finishReason:", finishReason, "| textBack:", textBack,
+                    "| full:", JSON.stringify(data).slice(0, 1000));
+
+        // Safety block (the model refused this particular photo/output).
+        if (/SAFETY|BLOCK|PROHIBITED|RECITATION/i.test(String(finishReason))) {
+          return json({
+            error: "safety",
+            message: "Cette photo n'a pas pu être transformée (filtre de sécurité). Essaie une photo de visage bien nette, de face."
+          }, 422);
+        }
+        // Anything else: model returned text / nothing instead of an image.
+        // This is usually a model-config issue, NOT the user's photo.
+        return json({
+          error: "noimage",
+          message: "Le générateur n'a pas pu produire d'image cette fois. Réessaie dans un instant."
+        }, 502);
       }
 
       // ---- success: increment limit + return image ----
@@ -212,19 +240,3 @@ export default {
     }
   }
 };
-
-/* ============================================================
-   SETUP (one-time, in Cloudflare dashboard)
-   ------------------------------------------------------------
-   1. Get a Gemini API key: https://aistudio.google.com/apikey
-   2. Your Worker project -> Settings -> Variables and Secrets:
-        Add secret  GEMINI_API_KEY = <your key>   (type: Secret)
-   3. (Optional but recommended) enable the 2/day limit:
-        - Storage & Databases -> KV -> Create namespace "bleus86-rate"
-        - Worker -> Settings -> Bindings -> Add -> KV namespace
-              Variable name: RATE_LIMIT_KV   Namespace: bleus86-rate
-        (If you skip this, generation still works with no limit.)
-   4. Make sure the static-assets binding exists (it does, since you
-      uploaded index.html). Its binding name should be ASSETS.
-   5. Re-deploy. Test:  https://bleus86.fr  -> upload -> generate.
-   ============================================================ */
